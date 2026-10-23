@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>শুধু তোমার জন্য ❤️</title>
+  <meta name="theme-color" content="#ff5c8a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: #ff5c8a;
+      --deep: #c2185b;
+      --soft: #fff0f5;
+      --ink: #4a1330;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Hind Siliguri", system-ui, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(160deg, #ffd6e4 0%, #ffe9f1 45%, #ffc2d6 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .floaters { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+    .floater {
+      position: absolute; bottom: -40px;
+      animation: floatUp linear forwards;
+      opacity: .7;
+    }
+    @keyframes floatUp {
+      to { transform: translateY(-115vh) rotate(25deg); opacity: 0; }
+    }
+    section {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 48px 20px;
+    }
+    .hidden { display: none; }
+    .big-heart {
+      font-size: 84px;
+      animation: beat 1.2s infinite;
+      filter: drop-shadow(0 8px 14px rgba(194,24,91,.35));
+    }
+    @keyframes beat {
+      0%,100% { transform: scale(1); }
+      15% { transform: scale(1.18); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.12); }
+    }
+    h1 { font-size: clamp(30px, 7vw, 54px); color: var(--deep); margin: 16px 0 10px; line-height: 1.25; }
+    .sub { font-size: clamp(17px, 3.8vw, 22px); opacity: .85; margin-bottom: 30px; }
+    button {
+      font-family: inherit; font-weight: 600; font-size: 19px;
+      border: none; border-radius: 999px; cursor: pointer;
+      padding: 14px 34px; color: #fff;
+      background: linear-gradient(135deg, var(--pink), var(--deep));
+      box-shadow: 0 10px 24px rgba(194,24,91,.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+    button:hover { transform: translateY(-2px) scale(1.03); }
+    button:active { transform: scale(.97); }
+
+    .card {
+      background: rgba(255,255,255,.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 24px;
+      padding: 30px 26px;
+      max-width: 620px; width: 100%;
+      box-shadow: 0 18px 40px rgba(194,24,91,.18);
+    }
+    .letter p {
+      font-size: clamp(18px, 4vw, 21px);
+      line-height: 1.9; margin: 14px 0;
+      opacity: 0; transform: translateY(14px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+    .letter p.show { opacity: 1; transform: none; }
+    .signature { font-weight: 700; color: var(--deep); margin-top: 22px; font-size: 22px; }
+
+    .reasons { display: grid; gap: 14px; max-width: 620px; width: 100%; margin-top: 8px; }
+    .reason {
+      background: rgba(255,255,255,.8);
+      border-radius: 18px; padding: 16px 20px;
+      font-size: 19px; text-align: left;
+      box-shadow: 0 8px 20px rgba(194,24,91,.12);
+      opacity: 0; transform: translateX(-24px);
+      transition: all .7s ease;
+    }
+    .reason.show { opacity: 1; transform: none; }
+    h2 { font-size: clamp(26px, 6vw, 38px); color: var(--deep); margin-bottom: 20px; }
+
+    .question h2 { margin-bottom: 8px; }
+    .btn-row { display: flex; gap: 18px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 26px; min-height: 80px; }
+    #yes { font-size: 22px; transition: transform .3s; }
+    #no { background: #9e9e9e; box-shadow: 0 8px 18px rgba(0,0,0,.2); }
+    #hint { margin-top: 18px; min-height: 28px; font-size: 18px; color: var(--deep); font-weight: 500; }
+
+    .overlay {
+      position: fixed; inset: 0; z-index: 50;
+      background: rgba(74,19,48,.55);
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .overlay.open { display: flex; animation: fade .4s; }
+    @keyframes fade { from { opacity: 0; } }
+    .modal { text-align: center; animation: pop .5s cubic-bezier(.2,1.4,.4,1); }
+    @keyframes pop { from { transform: scale(.6); opacity: 0; } }
+    .modal .emoji { font-size: 70px; }
+    .modal p { font-size: 20px; line-height: 1.8; margin: 12px 0 20px; }
+
+    .confetti {
+      position: fixed; z-index: 60; pointer-events: none;
+      left: 50%; top: 55%;
+      animation: burst 1.8s ease-out forwards;
+    }
+    @keyframes burst {
+      to { transform: translate(var(--x), var(--y)) rotate(var(--r)); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="floaters" id="floaters"></div>
+
+  <!-- ১. শুরুর স্ক্রিন -->
+  <section id="hero">
+    <div class="big-heart">💖</div>
+    <h1><span id="wifeName">প্রিয়</span>, শুধু তোমার জন্য…</h1>
+    <p class="sub">আমি জানি তুমি রেগে আছো। একটু কি শুনবে আমার কথাগুলো?</p>
+    <button id="startBtn">হ্যাঁ, শুনবো 🥺</button>
+  </section>
+
+  <!-- ২. চিঠি -->
+  <section id="letterSec" class="hidden">
+    <div class="card letter" id="letter"></div>
+    <button id="toReasons" class="hidden" style="margin-top:26px">আরও একটু 💌</button>
+  </section>
+
+  <!-- ৩. কারণগুলো -->
+  <section id="reasonsSec" class="hidden">
+    <h2>তোমাকে নিয়ে যা যা ভালো লাগে ✨</h2>
+    <div class="reasons" id="reasons"></div>
+    <button id="toQuestion" class="hidden" style="margin-top:28px">শেষ একটা কথা… 🥹</button>
+  </section>
+
+  <!-- ৪. প্রশ্ন -->
+  <section id="questionSec" class="hidden question">
+    <div class="big-heart">🥺</div>
+    <h2>তাহলে… আমাকে মাফ করে দেবে?</h2>
+    <p class="sub">প্লিজ প্লিজ প্লিজ 🙏</p>
+    <div class="btn-row" id="btnRow">
+      <button id="yes">হ্যাঁ, মাফ করলাম ❤️</button>
+      <button id="no">না 😤</button>
+    </div>
+    <p id="hint"></p>
+  </section>
+
+  <!-- ফাইনাল -->
+  <div class="overlay" id="overlay">
+    <div class="card modal">
+      <div class="emoji">🥰</div>
+      <h2>ধন্যবাদ, আমার প্রিয় মানুষ!</h2>
+      <p id="finalMsg"></p>
+      <button id="closeBtn">আজ রাতে আমি তোমাকে একটা ট্রিট দিচ্ছি 🍫</button>
+    </div>
+  </div>
+
+  <script>
+    // ================== এখানে নিজের মতো বদলে নাও ==================
+    const CONFIG = {
+      wifeName: "জান",           // বউয়ের নাম বা আদরের ডাক
+      yourName: "তোমার পাগলটা",  // তোমার নাম/ডাকনাম
+      letter: [
+        "আমি জানি আজ আমি ভুল করেছি, আর তাতে তোমার মন খারাপ হয়েছে।",
+        "রাগের মাথায় এমন কিছু বলেছি যা বলা উচিত ছিল না। এজন্য সত্যিই আমি দুঃখিত।",
+        "তোমার চেয়ে বেশি আমার কাছে আর কিছুই গুরুত্বপূর্ণ না। ঝগড়া হোক বা মান-অভিমান, শেষে আমি তোমার কাছেই ফিরে আসতে চাই।",
+        "তুমি পাশে না থাকলে সব কিছু কেমন ফাঁকা লাগে। আমাকে আরেকটা সুযোগ দেবে?"
+      ],
+      reasons: [
+        "🌸 তোমার হাসিটা আমার সারাদিনের ক্লান্তি মুছে দেয়",
+        "☕ তুমি আমার প্রতিটা ছোট ছোট কথা মনে রাখো",
+        "🏠 তুমি আছো বলেই ঘরটা সত্যিকারের ‘বাড়ি’ হয়ে ওঠে",
+        "🤝 সব ঝড়ে তুমি আমার পাশে থেকেছো",
+        "💞 রাগ করলেও তুমি আমার সবচেয়ে প্রিয় মানুষ"
+      ],
+      noHints: [
+        "ভুল বাটনে চাপ দিচ্ছো 😜",
+        "আরেকবার চেষ্টা করো 😏",
+        "বাটনটা তো পালিয়ে যাচ্ছে! 🏃",
+        "আচ্ছা, এবার ‘হ্যাঁ’ চাপো না প্লিজ 🥺",
+        "‘হ্যাঁ’ বাটনটা কত বড় হয়ে গেছে দেখো 😂",
+        "তুমি না বললেও আমি হাল ছাড়ছি না ❤️",
+        "প্লিজ প্লিজ প্লিজ… 🙏"
+      ],
+      finalMessage:
+        "কথা দিচ্ছি, আজ থেকে আরও বেশি শুনবো, আরও কম রাগ করবো, আর তোমাকে আরও বেশি ভালোবাসবো। ❤️"
+    };
+    // =============================================================
+
+    const $ = (id) => document.getElementById(id);
+    $("wifeName").textContent = CONFIG.wifeName;
+
+    // ভাসমান হার্ট
+    const floaters = $("floaters");
+    const icons = ["❤️", "💖", "💗", "🌸", "💕", "✨"];
+    function spawnFloater() {
+      const el = document.createElement("span");
+      el.className = "floater";
+      el.textContent = icons[Math.floor(Math.random() * icons.length)];
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.fontSize = 16 + Math.random() * 28 + "px";
+      const dur = 6 + Math.random() * 6;
+      el.style.animationDuration = dur + "s";
+      floaters.appendChild(el);
+      setTimeout(() => el.remove(), dur * 1000);
+    }
+    setInterval(spawnFloater, 450);
+
+    function reveal(sec) {
+      sec.classList.remove("hidden");
+      sec.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // চিঠি
+    const letterBox = $("letter");
+    CONFIG.letter.forEach((t) => {
+      const p = document.createElement("p");
+      p.textContent = t;
+      letterBox.appendChild(p);
+    });
+    const sig = document.createElement("p");
+    sig.className = "signature";
+    sig.textContent = "ইতি, " + CONFIG.yourName + " ❤️";
+    letterBox.appendChild(sig);
+
+    $("startBtn").onclick = () => {
+      reveal($("letterSec"));
+      const ps = [...letterBox.querySelectorAll("p")];
+      ps.forEach((p, i) => setTimeout(() => p.classList.add("show"), 600 + i * 1700));
+      setTimeout(() => $("toReasons").classList.remove("hidden"), 600 + ps.length * 1700);
+    };
+
+    // কারণগুলো
+    const reasonsBox = $("reasons");
+    CONFIG.reasons.forEach((t) => {
+      const d = document.createElement("div");
+      d.className = "reason";
+      d.textContent = t;
+      reasonsBox.appendChild(d);
+    });
+    $("toReasons").onclick = () => {
+      reveal($("reasonsSec"));
+      const rs = [...reasonsBox.children];
+      rs.forEach((r, i) => setTimeout(() => r.classList.add("show"), 500 + i * 900));
+      setTimeout(() => $("toQuestion").classList.remove("hidden"), 500 + rs.length * 900);
+    };
+    $("toQuestion").onclick = () => reveal($("questionSec"));
+
+    // "না" বাটন পালায়
+    const noBtn = $("no"), yesBtn = $("yes"), hint = $("hint");
+    let tries = 0, yesScale = 1;
+    function dodge(e) {
+      if (e) e.preventDefault();
+      tries++;
+      hint.textContent = CONFIG.noHints[Math.min(tries - 1, CONFIG.noHints.length - 1)];
+      yesScale = Math.min(yesScale + 0.18, 2.4);
+      yesBtn.style.transform = "scale(" + yesScale + ")";
+      noBtn.style.position = "fixed";
+      const w = noBtn.offsetWidth, h = noBtn.offsetHeight;
+      noBtn.style.left = Math.random() * (window.innerWidth - w - 20) + 10 + "px";
+      noBtn.style.top = Math.random() * (window.innerHeight - h - 20) + 10 + "px";
+      noBtn.style.zIndex = 20;
+    }
+    noBtn.addEventListener("mouseenter", dodge);
+    noBtn.addEventListener("touchstart", dodge, { passive: false });
+    noBtn.addEventListener("click", dodge);
+
+    // কনফেটি + ফাইনাল
+    function burst() {
+      const em = ["❤️", "💖", "🌹", "🎉", "💕", "✨", "🥰"];
+      for (let i = 0; i < 70; i++) {
+        const c = document.createElement("span");
+        c.className = "confetti";
+        c.textContent = em[Math.floor(Math.random() * em.length)];
+        c.style.fontSize = 18 + Math.random() * 26 + "px";
+        const ang = Math.random() * Math.PI * 2;
+        const dist = 150 + Math.random() * 380;
+        c.style.setProperty("--x", Math.cos(ang) * dist + "px");
+        c.style.setProperty("--y", Math.sin(ang) * dist - 120 + "px");
+        c.style.setProperty("--r", Math.random() * 720 - 360 + "deg");
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 1900);
+      }
+    }
+    yesBtn.onclick = () => {
+      $("finalMsg").textContent = CONFIG.finalMessage;
+      $("overlay").classList.add("open");
+      burst();
+      setTimeout(burst, 600);
+      setTimeout(burst, 1200);
+    };
+    $("closeBtn").onclick = () => { burst(); };
+  </script>
+</body>
+</html>
